@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'core/di/injection.dart' as di;
-import 'feature/user_profile/presentation/architecture_showcase_page.dart';
+import 'feature/user_profile/presentation/pages/architecture_showcase_page/architecture_showcase_page.dart';
 
 void main() {
   di.init();

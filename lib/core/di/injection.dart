@@ -6,6 +6,11 @@ final sl = GetIt.instance;
 
 void init() {
   final repository = UserRepositoryImpl();
+
+  // Register the unified repository
+  sl.registerLazySingleton<UserRepository>(() => repository);
+
+  // Keep backward compatibility with individual interfaces
   sl.registerLazySingleton<UserReader>(() => repository);
   sl.registerLazySingleton<UserWriter>(() => repository);
   sl.registerLazySingleton<UserDeleter>(() => repository);

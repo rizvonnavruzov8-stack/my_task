@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../core/di/injection.dart' as di;
+import '../../../../core/di/injection.dart' as di;
 import '../cubit/user_profile_cubit.dart';
 import '../cubit/user_profile_state.dart';
-import '../data/user_model.dart';
-import 'widgets/action_buttons.dart';
-import 'widgets/user_avatar.dart';
-import 'widgets/user_info_form.dart';
+import '../../data/user_model.dart';
+import '../widgets/action_buttons.dart';
+import '../widgets/user_avatar.dart';
+import '../widgets/user_info_form.dart';
 
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
@@ -14,11 +14,7 @@ class UserProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UserProfileCubit(
-        reader: di.sl(),
-        writer: di.sl(),
-        deleter: di.sl(),
-      )..loadUser(),
+      create: (context) => UserProfileCubit(repository: di.sl())..loadUser(),
       child: const UserProfileView(),
     );
   }
@@ -64,21 +60,19 @@ class _UserProfileViewState extends State<UserProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('User Profile (SOLID)'),
-      ),
+      appBar: AppBar(title: const Text('User Profile (SOLID)')),
       body: BlocConsumer<UserProfileCubit, UserProfileState>(
         listener: (context, state) {
           if (state is UserProfileError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           } else if (state is UserProfileSaved) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('User saved successfully')),
             );
           } else if (state is UserProfileDeleted) {
-             ScaffoldMessenger.of(context).showSnackBar(
+            ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('User deleted successfully')),
             );
           }
@@ -89,7 +83,7 @@ class _UserProfileViewState extends State<UserProfileView> {
           }
 
           if (state is UserProfileDeleted) {
-             return const Center(child: Text("User has been deleted."));
+            return const Center(child: Text("User has been deleted."));
           }
 
           User? currentUser;
@@ -137,7 +131,7 @@ class _UserProfileViewState extends State<UserProfileView> {
                 DeleteButton(
                   onPressed: () => _onDeletePressed(context, currentUser!.id),
                   isLoading: isDeleting,
-                )
+                ),
               ],
             ),
           );

@@ -1,7 +1,7 @@
 import '../data/user_model.dart';
 import 'user_interfaces.dart';
 
-class UserRepositoryImpl implements UserReader, UserWriter, UserDeleter {
+class UserRepositoryImpl implements UserRepository {
   @override
   Future<User> getUser() async {
     await Future.delayed(const Duration(seconds: 1));
